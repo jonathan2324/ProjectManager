@@ -19,7 +19,7 @@ public class Project {
 
     @NotBlank(message = "Project identifier is required")
     @Size(min = 4, max = 5, message = "Please use 4 to 5 characters")
-    @Column(updatable = false, unique = true) //sets validation at database level-> happens after the validation service
+    @Column(updatable = false, unique = true) //@Column sets validation at database level-> happens after the validation service
     private String projectIdentifier;
 
     @NotBlank(message = "Project description is required")

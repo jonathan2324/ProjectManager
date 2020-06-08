@@ -1,6 +1,8 @@
 package com.jonathanhuertas.taskmanager2.exceptions;
 
-
+/*
+This is how we handle the exception Response
+ */
 public class ProjectIdExceptionResponse {
 
     private String projectIdentifier;

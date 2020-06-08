@@ -8,28 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/project")
+@CrossOrigin
 public class ProjectController {
 
 
-    @Autowired
+    @Autowired//gives us access to the JPA CRUD and custom methods to query, also provides access to Exception handling logic
     private ProjectService projectService;
 
-    @Autowired
+    @Autowired//gives access to how we render the the validation errors
     private MapValidationErrorService mapValidationErrorService;
 
 
-    //@Valid checks to see if it is a valid object
-    //BindingResult interface analyzes object that is labeled with @Valid and determines whether there are errors
+    //@Valid checks to see if it is a valid object with the fields annotations
+    //BindingResult interface analyzes object that is labeled with @Valid and determines whether there are errors for those fields
     //BindingResult inherits methods from Errors
     @PostMapping("")
     public ResponseEntity<?> createNewPrpoject(@Valid @RequestBody Project project, BindingResult result){
@@ -37,11 +35,11 @@ public class ProjectController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         //if there are errors on the errorMap, return the errors to the client
         if(errorMap != null){
-            return errorMap;
+            return errorMap; //this will return the Map of key, value errors and messages to the client
         }
 
 
-        projectService.saveOrUpdateProject(project); //this is where errors will occur for database exceptions when persisting
+        projectService.saveOrUpdateProject(project); //this is where errors will occur for database exceptions when persisting -> @Column errors
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
     }
 

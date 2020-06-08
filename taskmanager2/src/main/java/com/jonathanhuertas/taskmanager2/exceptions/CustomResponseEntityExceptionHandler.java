@@ -8,12 +8,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+/*
 
+ */
 @RestController
 @ControllerAdvice//mechanism that helps break away from having exception handlers that are controller specific
 //essentially sets up global exception handling for controllers
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    //if there is a ProjectIdException thrown, this method will be called passing in the exception with the message
+    //because we inherited from RuntimeException
+
+    //then, the method will create a new object from our custom ProjectIdExceptionResponse and we pass the message from the RuntimeException
+    //remember that in the ProjectIdExceptionResponse, we said that the field was named projectIdentifier just like in the Object Project
+    //that way, any message from the error will find that field and be the value for the projectIdentifier
+    //so the error will show up as { "projectIdentifier" : "Error message blah blah" }
     @ExceptionHandler
     public final ResponseEntity<Object> handleProjectIdException(ProjectIdException ex, WebRequest request){
         ProjectIdExceptionResponse exceptionResponse = new ProjectIdExceptionResponse(ex.getMessage());

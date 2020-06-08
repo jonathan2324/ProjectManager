@@ -6,6 +6,13 @@ import com.jonathanhuertas.taskmanager2.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/*
+Here we connect to the CRUD Repository so that we have access to query the database
+we use this file for logic and query the database to return the data to the controller
+In the repository, we get access to basic crud operations, we added a few methods such as findByProjectIdentifier
+but we have access to save(), delete()
+ */
+
 @Service
 public class ProjectService {
 

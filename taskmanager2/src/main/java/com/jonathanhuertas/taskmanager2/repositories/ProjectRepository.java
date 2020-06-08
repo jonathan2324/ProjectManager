@@ -12,6 +12,8 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
     //JPA gives you a way to find by attributes related to the Object
     Project findByProjectIdentifier(String projectId);
 
+
+    //Method to query for all the projects for a user
     @Override
     Iterable<Project> findAll();
 }
