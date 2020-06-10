@@ -39,8 +39,8 @@ public class ProjectController {
         }
 
 
-        projectService.saveOrUpdateProject(project); //this is where errors will occur for database exceptions when persisting -> @Column errors
-        return new ResponseEntity<Project>(project, HttpStatus.CREATED);
+        Project project1 = projectService.saveOrUpdateProject(project); //this is where errors will occur for database exceptions when persisting -> @Column errors
+        return new ResponseEntity<Project>(project1, HttpStatus.CREATED);
     }
 
     @GetMapping("/{projectId}")

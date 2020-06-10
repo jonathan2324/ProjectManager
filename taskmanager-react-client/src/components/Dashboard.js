@@ -11,6 +11,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    //this.props.project refers to the state project and we are pulling off the array of projects
     const { projects } = this.props.project;
     return (
       <div className="projects">
@@ -40,6 +41,7 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  //this refers to the state project which contains the array of projects and the one project when selected
   project: state.project,
 });
 

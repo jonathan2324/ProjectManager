@@ -35,8 +35,15 @@ public class Project {
     @JsonFormat(pattern  = "yyyy-mm-dd")
     private Date updated_At;
 
+    //Fetch-> Backlog data readily available, cascade all means project is the owning side of the relationship
+    //if we delete the project, it will delete the backlog and the project tasks
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project") //will recursively set this so go to child and add JSON ignore
+    private Backlog backlog;
+
     public Project() {
     }
+
+
 
     //every time we create a new object we will store the current date
     @PrePersist
@@ -113,5 +120,28 @@ public class Project {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", projectName='" + projectName + '\'' +
+                ", projectIdentifier='" + projectIdentifier + '\'' +
+                ", description='" + description + '\'' +
+                ", start_date=" + start_date +
+                ", end_date=" + end_date +
+                ", created_At=" + created_At +
+                ", updated_At=" + updated_At +
+                ", backlog=" + backlog +
+                '}';
     }
 }

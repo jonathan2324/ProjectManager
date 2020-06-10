@@ -9,6 +9,7 @@ class ProjectItem extends Component {
     this.props.deleteProject(id);
   };
   render() {
+    //this refers to the individual project being rendered
     const { project } = this.props;
     return (
       <div className="container">

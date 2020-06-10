@@ -53,6 +53,7 @@ class UpdateProject extends Component {
     //match contains the id that we pass to the params
     const { id } = this.props.match.params;
 
+    //called immediatley so this returns props to this component which called componentWillReceivedProps passing in the project
     this.props.getProject(id, this.props.history);
   }
 

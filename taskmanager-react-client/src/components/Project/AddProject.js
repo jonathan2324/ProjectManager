@@ -23,6 +23,8 @@ class AddProject extends Component {
   }
 
   //life cycle hook
+  //if the forms is submitted that is not valid, the component will received errors from state
+  //which will shows up in nextProps
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
