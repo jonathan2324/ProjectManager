@@ -1,6 +1,7 @@
 package com.jonathanhuertas.taskmanager2.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -38,6 +39,7 @@ public class Project {
     //Fetch-> Backlog data readily available, cascade all means project is the owning side of the relationship
     //if we delete the project, it will delete the backlog and the project tasks
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project") //will recursively set this so go to child and add JSON ignore
+    @JsonIgnore
     private Backlog backlog;
 
     public Project() {
