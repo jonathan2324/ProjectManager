@@ -11,6 +11,7 @@ import java.util.Date;
 @Entity
 public class Project {
 
+    //this will be stored as project_id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,9 +38,10 @@ public class Project {
     private Date updated_At;
 
     //Fetch-> Backlog data readily available, cascade all means project is the owning side of the relationship
-    //if we delete the project, it will delete the backlog and the project tasks
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project") //will recursively set this so go to child and add JSON ignore
-    @JsonIgnore
+    //FetechType.EAGER-> we will receive access to the full list of project tasks
+    //if we delete the project, it will delete the backlog and the project tasks-> CacaseType.ALL
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project") //mapped by the field name "project" located on backlog for this project
+    @JsonIgnore//use this to break infinite recursion
     private Backlog backlog;
 
     public Project() {
@@ -53,8 +55,7 @@ public class Project {
         this.created_At = new Date();
     }
 
-    //everytime the object is updated, we will store the current date
-
+    //every time the object is updated, we will store the current date
     @PreUpdate
     protected void onUpdate(){
         this.updated_At = new Date();

@@ -27,10 +27,10 @@ public class ProjectController {
 
 
     //@Valid checks to see if it is a valid object with the fields annotations
-    //BindingResult interface analyzes object that is labeled with @Valid and determines whether there are errors for those fields
+    //BindingResult interface analyzes object that is labeled with @Valid and determines whether there are errors for those fields that contain validation constraints
     //BindingResult inherits methods from Errors
     @PostMapping("")
-    public ResponseEntity<?> createNewPrpoject(@Valid @RequestBody Project project, BindingResult result){
+    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result){
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         //if there are errors on the errorMap, return the errors to the client
@@ -62,5 +62,8 @@ public class ProjectController {
 
         return new ResponseEntity<String>("Project with ID: " + projectId + " was deleted", HttpStatus.OK);
     }
+
+
+
 
 }

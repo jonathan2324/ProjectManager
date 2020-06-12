@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 Here we connect to the CRUD Repository so that we have access to query the database
 we use this file for logic and query the database to return the data to the controller
 In the repository, we get access to basic crud operations, we added a few methods such as findByProjectIdentifier
-but we have access to save(), delete()
+but we have access to save(), delete() out of the box due to JPA
  */
 
 @Service
@@ -27,26 +27,29 @@ public class ProjectService {
 
 
     public Project saveOrUpdateProject(Project project){
+        String projectIdentifierUpper = project.getProjectIdentifier().toUpperCase();
 
         try{
-            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
+
+            project.setProjectIdentifier(projectIdentifierUpper);
 
             if(project.getId() == null){
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
                 backlog.setProject(project);
-                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+                backlog.setProjectIdentifier(projectIdentifierUpper);
             }
 
             if(project.getId() != null){
-                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+                project.setBacklog(backlogRepository.findByProjectIdentifier(projectIdentifierUpper));
             }
 
 
 
             return projectRepository.save(project);
         } catch(Exception err){
-            throw new ProjectIdException("Project ID " + project.getProjectIdentifier().toUpperCase() + " already exists");
+            throw new ProjectIdException("Project ID " + projectIdentifierUpper + " already exists");
         }
     }
 

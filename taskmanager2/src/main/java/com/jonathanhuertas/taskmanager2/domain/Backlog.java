@@ -7,6 +7,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+We are using a backlog as an architectural design because this will allow the front end to obtain the project information
+without having to get all the tasks for the project every time we only need the project information
+this saves the amount of information returned to the client making the application more efficient
+ */
+
 @Entity
 public class Backlog {
 
@@ -14,6 +20,7 @@ public class Backlog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //set to zero because every project will have a sequence
     private Integer PTSequence = 0;
 
     private String projectIdentifier;
@@ -22,12 +29,12 @@ public class Backlog {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", nullable = false)
     @JsonIgnore //need this to avoid infinite recursion
-    private Project project;
+    private Project project; //-> this project id will be stored as project_id
 
-    //OneToMany projecttask
+    //OneToMany Backlog will be owning side
     //deleting backlog, delete project tasks
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "backlog")
+    //orphanRemoval -> when child entity is no longer refrecened from the parent, then the child will go away as well
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true)
     private List<ProjectTask> projectTasks = new ArrayList<>();
 
     public Backlog() {
