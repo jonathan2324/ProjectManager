@@ -18,4 +18,11 @@ public class ProjectIdExceptionResponse {
     public void setProjectIdentifier(String projectIdentifier) {
         this.projectIdentifier = projectIdentifier;
     }
+
+    @Override
+    public String toString() {
+        return "ProjectIdExceptionResponse{" +
+                "projectIdentifier='" + projectIdentifier + '\'' +
+                '}';
+    }
 }

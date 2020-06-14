@@ -38,8 +38,8 @@ public class Project {
     private Date updated_At;
 
     //Fetch-> Backlog data readily available, cascade all means project is the owning side of the relationship
-    //FetechType.EAGER-> we will receive access to the full list of project tasks
-    //if we delete the project, it will delete the backlog and the project tasks-> CacaseType.ALL
+    //FetechType.EAGER-> we will receive access to the full list of project tasks immediately with the rest of the fields for this project object
+    //CacaseType.ALL -> if we delete the project, it will delete the backlog and the project tasks
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project") //mapped by the field name "project" located on backlog for this project
     @JsonIgnore//use this to break infinite recursion
     private Backlog backlog;
@@ -49,7 +49,7 @@ public class Project {
 
 
 
-    //every time we create a new object we will store the current date
+    //every time we create a new object we will store the current date -> should only happen once
     @PrePersist
     protected void onCreate(){
         this.created_At = new Date();

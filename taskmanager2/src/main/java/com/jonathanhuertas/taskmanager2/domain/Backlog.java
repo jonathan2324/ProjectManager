@@ -20,20 +20,20 @@ public class Backlog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //set to zero because every project will have a sequence
+    //set to zero because every project will have its own sequence for projectTasks
     private Integer PTSequence = 0;
 
     private String projectIdentifier;
 
     //OneToOne with project
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "project_id", nullable = false)
+    @JoinColumn(name = "project_id", nullable = false)//this means we will have a column named project_id which will reference the project this backlog is assigned to
     @JsonIgnore //need this to avoid infinite recursion
     private Project project; //-> this project id will be stored as project_id
 
     //OneToMany Backlog will be owning side
     //deleting backlog, delete project tasks
-    //orphanRemoval -> when child entity is no longer refrecened from the parent, then the child will go away as well
+    //orphanRemoval -> when child entity is no longer referenced from the parent, then the child will go away as well
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true)
     private List<ProjectTask> projectTasks = new ArrayList<>();
 

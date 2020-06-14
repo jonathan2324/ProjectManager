@@ -8,12 +8,9 @@ import com.jonathanhuertas.taskmanager2.repositories.BacklogRepository;
 import com.jonathanhuertas.taskmanager2.repositories.ProjectRepository;
 import com.jonathanhuertas.taskmanager2.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
+
 
 @Service
 public class ProjectTaskService {
@@ -73,6 +70,7 @@ public class ProjectTaskService {
             throw new ProjectNotFoundException("Project with ID " + id + " does not exist");
         }
 
+        //returns an array of project tasks ordered by priority to client
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 

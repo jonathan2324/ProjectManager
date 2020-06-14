@@ -34,6 +34,8 @@ public class ProjectService {
 
             project.setProjectIdentifier(projectIdentifierUpper);
 
+            //if the id coming in is null, this means its a new project -> must set a new backlog upon creation
+            //if it contains an id, it will be an update
             if(project.getId() == null){
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
@@ -41,14 +43,16 @@ public class ProjectService {
                 backlog.setProjectIdentifier(projectIdentifierUpper);
             }
 
+            //if it is an update, we will set the backlog with the existing backlog for that project with the specific id
             if(project.getId() != null){
                 project.setBacklog(backlogRepository.findByProjectIdentifier(projectIdentifierUpper));
             }
+            return projectRepository.save(project); //save comes with CRUD Repository JPA
 
-
-
-            return projectRepository.save(project);
         } catch(Exception err){
+            //we have to throw an exception here because @Column errors are not caught by validation
+            //they occur at the database level so we must throw this custom exception for projectIdentifier that is already used
+            //this will occur if a user tries to save a project that already uses the specific projectIdentifier attempting to be saved
             throw new ProjectIdException("Project ID " + projectIdentifierUpper + " already exists");
         }
     }
@@ -57,6 +61,7 @@ public class ProjectService {
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
         if(project == null){
+            //the ProjectExceptionResponse object is returned with the message below in JSON format to client
             throw new ProjectIdException("Project ID " + projectId + " does not exists");
         }
 
@@ -64,7 +69,7 @@ public class ProjectService {
     }
 
     //iterable-> something that returns a list, basic way to extract is to traverse
-    //this iterable returns a json object
+    //this iterable returns an array of JSON format projects
     public Iterable<Project> findAllProjects(){
         return projectRepository.findAll();
     }

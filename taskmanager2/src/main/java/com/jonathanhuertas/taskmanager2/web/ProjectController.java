@@ -35,7 +35,7 @@ public class ProjectController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         //if there are errors on the errorMap, return the errors to the client
         if(errorMap != null){
-            return errorMap; //this will return the Map of key, value errors and messages to the client
+            return errorMap; //this will return the Map of key, value errors and messages to the client if there are field errors
         }
 
 

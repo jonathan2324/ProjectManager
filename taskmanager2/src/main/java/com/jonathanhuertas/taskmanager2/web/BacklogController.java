@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/*
+this is a controller that manages the backlog which contains the list for all the projectTasks for a project
+
+ */
+
 @RestController
 @RequestMapping("/api/backlog")
 @CrossOrigin
@@ -22,6 +27,7 @@ public class BacklogController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
+    //the backlog_id is really the projectIdentifier that owns the backlog
     @PostMapping("/{backlog_id}")
     public ResponseEntity<?>  addPTtoBacklog(@Valid @RequestBody ProjectTask projectTask, BindingResult result, @PathVariable String backlog_id){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);

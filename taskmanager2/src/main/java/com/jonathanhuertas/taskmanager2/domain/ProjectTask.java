@@ -27,7 +27,6 @@ public class ProjectTask {
 
     private Date dueDate;
     //ManyToOne with Backlog
-    //CascadeType.REFRESH _> can delete a projecttask that belongs to backlog and it will tell the backlog it does not exist
     @ManyToOne(fetch = FetchType.EAGER)//Remove REFRESH because it reloads the managed objects from database, we need refresh the owning side only
     @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
     @JsonIgnore
