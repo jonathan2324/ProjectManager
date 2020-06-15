@@ -11,7 +11,7 @@ import {
 //arrow function that returns the dispatch function
 export const createProject = (project, history) => async (dispatch) => {
   try {
-    const res = await axios.post("/api/project", project);
+    await axios.post("/api/project", project);
     history.push("/dashboard");
     dispatch({
       type: GET_ERRORS,
