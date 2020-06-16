@@ -1,5 +1,6 @@
 package com.jonathanhuertas.taskmanager2.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class ProjectTask {
 
     private Integer priority;
 
+    @JsonFormat(pattern  = "yyyy-mm-dd")
     private Date dueDate;
     //ManyToOne with Backlog
     @ManyToOne(fetch = FetchType.EAGER)//Remove REFRESH because it reloads the managed objects from database, we need refresh the owning side only
