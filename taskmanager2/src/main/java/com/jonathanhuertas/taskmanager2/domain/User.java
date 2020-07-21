@@ -8,13 +8,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /*
-the UserDetails interface -> Must have a User of type UserDetails that way you can customize the UserDetailsService
-UserDetailsService -> makes sure User actually exists and that is a valid user to login with
-could also do this by using another class implementing UserDetails and Extending the User
+UserDetails -> provide the necessary information to build an Authentication object from your application's DAOs or other source source of security data.
+
+UserDetails represents the principal, but in an extensivle and application-specific way.
+UserDetails is basically the adapter between your own user database and what Spring Security needs inside the SecurityContextHolder
+
+Being a representation of something from your own user database, quite often you will cast the
+UserDetails to the original object that your application provided, so you can call business-specific methods
+(like getEmail(), getEmployeeNumber() and so on).
  */
 
 @Entity
@@ -43,6 +50,8 @@ public class User implements UserDetails {
     private Date updated_At;
 
     //OneToMany with Project
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
 
     @PrePersist
     protected void onCreate(){
@@ -115,6 +124,27 @@ public class User implements UserDetails {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                ", created_At=" + created_At +
+                ", updated_At=" + updated_At +
+                '}';
     }
 
     //UserDetails interface methods

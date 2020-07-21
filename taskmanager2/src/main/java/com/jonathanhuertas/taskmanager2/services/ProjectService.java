@@ -2,9 +2,12 @@ package com.jonathanhuertas.taskmanager2.services;
 
 import com.jonathanhuertas.taskmanager2.domain.Backlog;
 import com.jonathanhuertas.taskmanager2.domain.Project;
+import com.jonathanhuertas.taskmanager2.domain.User;
 import com.jonathanhuertas.taskmanager2.exceptions.ProjectIdException;
+import com.jonathanhuertas.taskmanager2.exceptions.ProjectNotFoundException;
 import com.jonathanhuertas.taskmanager2.repositories.BacklogRepository;
 import com.jonathanhuertas.taskmanager2.repositories.ProjectRepository;
+import com.jonathanhuertas.taskmanager2.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +28,32 @@ public class ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
-    public Project saveOrUpdateProject(Project project){
+
+    public Project saveOrUpdateProject(Project project, String username){
         String projectIdentifierUpper = project.getProjectIdentifier().toUpperCase();
+
+        //check to see if the project id is not null which  means its an update
+        if(project.getId() != null){
+            Project existingProject = projectRepository.findByProjectIdentifier(project.getProjectIdentifier());
+
+            //if the project exists but the project leader is not the username passed in, throw exception
+            if(existingProject != null && (!existingProject.getProjectLeader().equals(username))){
+                throw new ProjectNotFoundException("Project not found in your account");
+            } else if (existingProject == null){
+                throw new ProjectNotFoundException("Project with ID: " + project.getProjectIdentifier() + " cannot be updated because it does not exist");
+            }
+        }
 
         try{
 
 
+            User user = userRepository.findByUsername(username);
+
+            project.setUser(user);//sets the OneToMany relationship
+            project.setProjectLeader(user.getUsername());
             project.setProjectIdentifier(projectIdentifierUpper);
 
             //if the id coming in is null, this means its a new project -> must set a new backlog upon creation
@@ -57,7 +79,7 @@ public class ProjectService {
         }
     }
 
-    public Project findProjectByIdentifier(String projectId){
+    public Project findProjectByIdentifier(String projectId, String username){
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
         if(project == null){
@@ -65,22 +87,23 @@ public class ProjectService {
             throw new ProjectIdException("Project ID " + projectId + " does not exists");
         }
 
+        //error if you are not the creator of the project
+        if(!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project not found in your account");
+        }
+
         return project;
     }
 
     //iterable-> something that returns a list, basic way to extract is to traverse
     //this iterable returns an array of JSON format projects
-    public Iterable<Project> findAllProjects(){
-        return projectRepository.findAll();
+    public Iterable<Project> findAllProjects(String username){
+        return projectRepository.findAllByProjectLeader(username);
     }
 
-    public void deleteProjectByIdentifier(String projectId){
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
+    public void deleteProjectByIdentifier(String projectId, String username){
 
-        if(projectId == null){
-            throw new ProjectIdException("Cannot delete project with id " + projectId + ". " + " This project does not exist");
-        }
-
-        projectRepository.delete(project);
+        projectRepository.delete(findProjectByIdentifier(projectId, username));
     }
+
 }

@@ -11,8 +11,8 @@ import java.util.Date;
 @Entity
 public class Project {
 
-    //this will be stored as project_id
-    @Id
+
+    @Id//this will be stored as project_id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -46,6 +46,12 @@ public class Project {
 
     public Project() {
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)//
+    @JsonIgnore//avoid infinite recursion
+    private User user;
+
+    private String projectLeader;
 
 
 
@@ -123,6 +129,22 @@ public class Project {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public String getProjectLeader() {
+        return projectLeader;
+    }
+
+    public void setProjectLeader(String projectLeader) {
+        this.projectLeader = projectLeader;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Backlog getBacklog() {

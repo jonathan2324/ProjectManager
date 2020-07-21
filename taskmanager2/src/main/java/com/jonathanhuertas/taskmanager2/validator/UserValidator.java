@@ -18,6 +18,10 @@ public class UserValidator implements Validator {
         return User.class.equals(aClass); //supporting our User class
     }
 
+
+    //We pass in the BindingResult along with the User from the register on UserController
+    //BindingResult is a class that extends Errors and User is an Object. That is why we can pass both into this method
+
     @Override
     public void validate(Object object, Errors errors) {
         User user = (User) object;

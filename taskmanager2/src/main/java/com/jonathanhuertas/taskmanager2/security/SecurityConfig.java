@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.jonathanhuertas.taskmanager2.security.SecurityConstants.H2_URL;
 import static com.jonathanhuertas.taskmanager2.security.SecurityConstants.SIGN_UP_URLS;
@@ -36,8 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
+    @Autowired//we created this bean in the main application file
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Bean//we never said that this is a component, therefore it is just a regular java class so we need an @Bean here to make an instance
+    public JwtAuthenticationFilter jwtAuthenticationFilter() { return new JwtAuthenticationFilter();}
+
+
 
 
 
@@ -67,6 +73,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SIGN_UP_URLS).permitAll()
                 .antMatchers(H2_URL).permitAll()
                 .anyRequest().authenticated();//anything other than above will need to be authenticated
+
+        //this says use this custom filter before the UsernamePasswordAuthenticationFilter class is used
+        //the UsernamePasswordAuthenticationFilter  is the filter that allows the user to authenticate
+        //UsernamePasswordAuthenticationFilter calls the AuthenticationManager to process each authentication request
+        //if Authentication is successful, the resuling Authentication object is placed in the SecurityContextHolder
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Override
@@ -74,10 +87,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
-    //create a bean for authentication manager
-
+    //create a bean for authentication manager-> This allows us to autowire authenticationManager in the application
     @Override
-    @Bean(BeanIds.AUTHENTICATION_MANAGER) //so we can autowire into controller
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }

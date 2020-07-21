@@ -16,6 +16,10 @@ import java.io.IOException;
 AuthenticationEntryPoint is an interface that provides the implementation for a method called commence
 which is called when an exception is thrown when a user is trying to access a resource that requires authentication
 
+AuthenticationEntryPoint = the way the server sends back a response indicating that a user must authenticate
+
+This will be responsible for sending back invalid login requests or validating that a user is logged in
+
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {

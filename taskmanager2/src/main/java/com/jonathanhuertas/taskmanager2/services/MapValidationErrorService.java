@@ -30,7 +30,7 @@ public class MapValidationErrorService {
             for(FieldError error : result.getFieldErrors() ){
                 //getting the field and the default message off the binding result
                 //name of the field with error is the key (getField), default message is the value(getDefaultMessage)
-                //this returns and array of objects each with a fieldName and the error message from the validation that failed
+                //this returns an array of objects each with a fieldName and the error message from the validation that failed
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
             return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
