@@ -21,7 +21,6 @@ This class has three main functions:
 
 @Component
 public class JwtTokenProvider {
-
     public String generateToken(Authentication authentication){
         User user = (User) authentication.getPrincipal(); //need to cast because authentication.getPrincipal() is of type UserDetails
         Date now = new Date(System.currentTimeMillis());
