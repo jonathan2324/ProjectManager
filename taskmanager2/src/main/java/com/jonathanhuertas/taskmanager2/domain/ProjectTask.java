@@ -26,7 +26,8 @@ public class ProjectTask {
 
     private Integer priority;
 
-    @JsonFormat(pattern  = "yyyy-mm-dd")
+
+    @JsonFormat(pattern  = "yyyy-MM-dd")
     private Date dueDate;
     //ManyToOne with Backlog
     @ManyToOne(fetch = FetchType.EAGER)//Remove REFRESH because it reloads the managed objects from database, we need refresh the owning side only
@@ -37,8 +38,10 @@ public class ProjectTask {
     @Column(updatable = false)
     private String projectIdentifier;
 
+    @JsonFormat(pattern  = "yyyy-MM-dd")
     private Date created_At;
 
+    @JsonFormat(pattern  = "yyyy-MM-dd")
     private Date updated_At;
 
     public ProjectTask() {

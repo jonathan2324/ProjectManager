@@ -18,7 +18,6 @@ This class has three main functions:
 -validate token
 -get user Id from token -> use customDetailsService to validate we have the correct user
  */
-
 @Component
 public class JwtTokenProvider {
     public String generateToken(Authentication authentication){

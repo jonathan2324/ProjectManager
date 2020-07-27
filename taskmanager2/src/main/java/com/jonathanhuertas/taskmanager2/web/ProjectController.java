@@ -42,6 +42,9 @@ public class ProjectController {
         //System.out.println(principal); -> UsernamePasswordAuthenticationToken object
 
         Project project1 = projectService.saveOrUpdateProject(project, principal.getName()); //this is where errors will occur for database exceptions when persisting -> @Column errors
+
+        System.out.println(project1);
+
         return new ResponseEntity<Project>(project1, HttpStatus.CREATED);
     }
 

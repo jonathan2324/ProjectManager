@@ -79,10 +79,12 @@ class UpdateProjectTask extends Component {
       acceptanceCriteria: this.state.acceptanceCriteria,
       status: this.state.status,
       priority: this.state.priority,
-      dueDate: this.state.priority.dueDate,
+      dueDate: this.state.dueDate,
       projectIdentifier: this.state.projectIdentifier,
       created_At: this.state.created_At,
     };
+
+    console.log(updatedProjectTask);
 
     //console.log(updatedProjectTask);
     this.props.updateProjectTask(
