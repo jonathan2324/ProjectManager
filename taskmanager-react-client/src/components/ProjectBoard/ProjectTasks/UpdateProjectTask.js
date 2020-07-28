@@ -84,7 +84,7 @@ class UpdateProjectTask extends Component {
       created_At: this.state.created_At,
     };
 
-    console.log(updatedProjectTask);
+    //console.log(updatedProjectTask);
 
     //console.log(updatedProjectTask);
     this.props.updateProjectTask(
